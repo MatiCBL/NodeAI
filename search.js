@@ -52,3 +52,10 @@ const createStore = () =>
     ),
     new OpenAIEmbeddings()
   );
+
+const search = async (query, count = 1) => {
+  const store = await createStore();
+  return store.similaritySearch(query, count);
+};
+
+console.log(await search("a movie that will make me feel like I am crazy"));
