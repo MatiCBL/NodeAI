@@ -25,3 +25,14 @@ const docsFromYTVideo = (video) => {
     })
   );
 };
+
+const docsFromPDF = () => {
+  const loader = new PDFLoader("xbox.pdf");
+  return loader.loadAndSplit(
+    new CharacterTextSplitter({
+      separator: ". ",
+      chunkSize: 2500,
+      chunkOverlap: 200,
+    })
+  );
+};
