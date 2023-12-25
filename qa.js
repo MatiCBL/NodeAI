@@ -36,3 +36,10 @@ const docsFromPDF = () => {
     })
   );
 };
+
+const loadStore = async () => {
+  const videoDocs = await docsFromYTVideo(video);
+  const pdfDocs = await docsFromPDF();
+
+  return createStore([...videoDocs, ...pdfDocs]);
+};
