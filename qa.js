@@ -11,3 +11,17 @@ const video = `https://youtu.be/zR_iuq2evXo?si=cG8rODgRgXOx9_Cn`;
 
 const createStore = (docs) =>
   MemoryVectorStore.fromDocuments(docs, new OpenAIEmbeddings());
+
+const docsFromYTVideo = (video) => {
+  const loader = YoutubeLoader.createFromUrl(video, {
+    language: "en",
+    addVideoInfo: true,
+  });
+  return loader.loadAndSplit(
+    new CharacterTextSplitter({
+      separator: " ",
+      chunkSize: 2500,
+      chunkOverlap: 100,
+    })
+  );
+};
