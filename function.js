@@ -38,6 +38,37 @@ const getCompletion = async (messages) => {
     ],
     temperature: 0,
   });
-
-  return response;
 };
+
+let response;
+while (true) {
+  response = await getCompletion(messages);
+
+  if (response.choices[0].finish_reason === "stop") {
+    console.log(response.choices[0].message.content);
+    break;
+  } else if (response.choices[0].finish_reason === "function_call") {
+    const fName = response.choices[0].message.function_call.name;
+    const args = response.choices[0].message.function_call.arguments;
+
+    const funcToCall = functions[fName];
+    const params = JSON.parse(args);
+
+    const result = funcToCall(params);
+
+    messages.push({
+      role: "assistant",
+      content: null,
+      function_call: {
+        name: fName,
+        arguments: args,
+      },
+    });
+
+    messages.push({
+      role: "function",
+      name: fName,
+      content: JSON.stringify({ result }),
+    });
+  }
+}
