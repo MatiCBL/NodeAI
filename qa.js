@@ -65,6 +65,12 @@ const query = async () => {
       },
     ],
   });
+
+  console.log(
+    `Answer: ${response.choices[0].message.content}\nSources: ${results
+      .map((r) => r.metadata.source)
+      .join(", ")}`
+  );
 };
 
 query();
