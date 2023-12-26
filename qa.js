@@ -43,3 +43,28 @@ const loadStore = async () => {
 
   return createStore([...videoDocs, ...pdfDocs]);
 };
+
+const query = async () => {
+  const store = await loadStore();
+  const results = await store.similaritySearch(question, 2);
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo-16k-0613",
+    temperature: 0,
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a helpful AI assistant. Answer questions to your best ability.",
+      },
+      {
+        role: "user",
+        content: `Answer the following question using the provided context. If you cannot answer the question with the context, don't lie and make up stuff. Just say you need more context.
+        Question: ${question}
+        Context: ${results.map((r) => r.pageContent).join("\n")}
+        `,
+      },
+    ],
+  });
+};
+
+query();
