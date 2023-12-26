@@ -13,6 +13,11 @@ const functions = {
   calculate({ expression }) {
     return math.evaluate(expression);
   },
+  async generateImage({ prompt }) {
+    const result = await openai.images.generate({ prompt });
+    console.log(result);
+    return "";
+  },
 };
 
 const getCompletion = async (messages) => {
@@ -33,6 +38,20 @@ const getCompletion = async (messages) => {
             },
           },
           required: ["expression"],
+        },
+      },
+      {
+        name: "generateImage",
+        description: "Create or generate image based on a description",
+        parameters: {
+          type: "object",
+          properties: {
+            prompt: {
+              type: "string",
+              description: "The description of the image to generate",
+            },
+          },
+          required: ["prompt"],
         },
       },
     ],
